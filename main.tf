@@ -7,7 +7,7 @@ provider "google" {
 resource "google_compute_instance_template" "default" {
   name           = "template-mig"
   machine_type   = "e2-micro"
-  //region         = "us-west1"
+  region         = "us-west1"
 
   tags           = ["mig-instance"]
 
@@ -59,7 +59,7 @@ resource "google_compute_health_check" "default" {
 
 resource "google_compute_autoscaler" "default" {
   name   = "example-autoscaler"
-  region = "us-west1"
+  //region = "us-west1"
   target = google_compute_region_instance_group_manager.mig.self_link
 
   autoscaling_policy {
