@@ -7,7 +7,7 @@ provider "google" {
 resource "google_compute_instance_template" "default" {
   name           = "template-mig"
   machine_type   = "e2-micro"
-  region         = "us-west1"
+  //region         = "us-west1"
 
   tags           = ["mig-instance"]
 
