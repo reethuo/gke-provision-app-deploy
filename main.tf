@@ -59,7 +59,8 @@ resource "google_compute_health_check" "default" {
 
 resource "google_compute_autoscaler" "default" {
   name   = "example-autoscaler"
-  //region = "us-west1"
+  region = "us-west1"  # ✅ Required for regional MIG
+
   target = google_compute_region_instance_group_manager.mig.self_link
 
   autoscaling_policy {
@@ -72,6 +73,7 @@ resource "google_compute_autoscaler" "default" {
     }
   }
 }
+
 variable "public_key" {
   type = string
   default = ""
