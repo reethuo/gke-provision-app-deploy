@@ -22,12 +22,11 @@ resource "google_compute_instance_template" "default" {
     access_config {}
   }
 
-  metadata_startup_script = <<-EOF
-    #!/bin/bash
-    apt-get update
-    apt-get install -y nginx
-    systemctl start nginx
-  EOF
+
+
+  metadata = {
+    ssh-keys = "ansible:${var.public_key}"
+  }
 }
 
 resource "google_compute_region_instance_group_manager" "mig" {
@@ -60,7 +59,7 @@ resource "google_compute_health_check" "default" {
 
 resource "google_compute_autoscaler" "default" {
   name   = "example-autoscaler"
-  region = "us-central1"
+  region = "us-west1"
   target = google_compute_region_instance_group_manager.mig.self_link
 
   autoscaling_policy {
@@ -73,3 +72,14 @@ resource "google_compute_autoscaler" "default" {
     }
   }
 }
+variable "public_key" {
+  type = string
+  default = ""
+}
+
+output "template_metadata" {
+  value = google_compute_instance_template.default.metadata
+}
+
+
+
