@@ -26,6 +26,31 @@ resource "google_compute_instance_template" "default" {
 
   metadata = {
     ssh-keys = "ansible:${var.public_key}"
+    startup-script       = <<-EOF
+      #!/bin/bash
+      set -e
+
+      # Install Docker on CentOS Stream 9
+      sudo dnf -y install dnf-plugins-core
+      sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+      # Start and enable Docker
+      sudo systemctl start docker
+      sudo systemctl enable docker
+
+      sudo docker run --cpus=1 --memory=2g \\
+        -e DELEGATE_NAME=reethu-docker \\
+        -e NEXT_GEN="true" \\
+        -e DELEGATE_TYPE="DOCKER" \\
+        -e ACCOUNT_ID=ucHySz2jQKKWQweZdXyCog \\
+        -e DELEGATE_TOKEN=NTRhYTY0Mjg3NThkNjBiNjMzNzhjOGQyNjEwOTQyZjY= \\
+        -e DELEGATE_TAGS="" \\
+        -e MANAGER_HOST_AND_PORT=https://app.harness.io \\
+        --restart always \\
+        --name harness-delegate \\
+        -d us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:25.05.85903
+    EOF
   }
 }
 
