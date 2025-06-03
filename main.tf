@@ -49,3 +49,17 @@ resource "helm_release" "nginx_ingress" {
 
   depends_on = [google_container_cluster.cluster_1]
 }
+resource "helm_release" "prometheus_operator" {
+  name             = "prometheus-operator"
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  chart            = "kube-prometheus-stack"
+  namespace        = "monitoring"
+  create_namespace = true
+  version          = "58.1.0" # Optional: stable version
+
+  values = [
+    file("${path.module}/prometheus-values.yaml")
+  ]
+
+  depends_on = [google_container_cluster.cluster_1]
+}
