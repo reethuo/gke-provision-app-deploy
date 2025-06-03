@@ -28,6 +28,7 @@ provider "kubernetes" {
   host                   = google_container_cluster.cluster_1.endpoint
   cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
   token                  = data.google_client_config.default.access_token
+  load_config_file       = false
 }
 
 provider "helm" {
@@ -35,6 +36,7 @@ provider "helm" {
     host                   = google_container_cluster.cluster_1.endpoint
     cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
     token                  = data.google_client_config.default.access_token
+    load_config_file       = false
   }
 }
 
