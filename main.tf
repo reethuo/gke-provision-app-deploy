@@ -63,3 +63,15 @@ resource "helm_release" "prometheus_operator" {
 
   depends_on = [google_container_cluster.cluster_1]
 }
+resource "helm_release" "hello_world" {
+  name             = "hello-world"
+  chart            = "https://charts.bitnami.com/bitnami/nginx" # Replace with your chart if it's custom
+  namespace        = "hello"
+  create_namespace = true
+
+  values = [
+    file("${path.module}/hello-values.yaml")
+  ]
+
+  depends_on = [google_container_cluster.cluster_1]
+}
