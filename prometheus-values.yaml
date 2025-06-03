@@ -1,0 +1,9 @@
+prometheus:
+  prometheusSpec:
+    remoteWrite:
+      - url: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom"
+        basicAuth:
+          username:
+            value: "2478155"
+          password:
+            value: "glc_eyJvIjoiMTQ0NzM3NiIsIm4iOiJzdGFjay0xMjc2OTYwLWhtLXJlYWQtbWV0cmljcy1wcm9tIiwiayI6InIwNmZwcFlxaTA3MXc4Y3E4N3FFWjBXMCIsIm0iOnsiciI6InByb2QtYXAtc291dGgtMSJ9fQ=="
