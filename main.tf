@@ -30,24 +30,38 @@ resource "google_compute_instance_template" "default" {
       #!/bin/bash
       set -e
 
-      # Install Docker on CentOS Stream 9
-      sudo dnf -y install dnf-plugins-core
-      sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-      sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  # Install required tools
+      dnf install -y yum-utils device-mapper-persistent-data lvm2
 
-      # Start and enable Docker
-      sudo systemctl start docker
-      sudo systemctl enable docker
+  # Add Docker repository
+      dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-      sudo docker run  --cpus=1 --memory=2g \
+  # Install Docker
+      dnf install -y docker-ce docker-ce-cli containerd.io
+
+  # Enable and start Docker
+      systemctl enable docker
+      systemctl start docker
+
+  # Wait for Docker daemon
+      until docker info >/dev/null 2>&1; do
+        echo "Waiting for Docker to start..."
+        sleep 3
+      done
+
+  # Run Harness Delegate
+      docker run --cpus=1 --memory=2g \
         -e DELEGATE_NAME=reethu-docker \
         -e NEXT_GEN="true" \
         -e DELEGATE_TYPE="DOCKER" \
         -e ACCOUNT_ID=ucHySz2jQKKWQweZdXyCog \
         -e DELEGATE_TOKEN=NTRhYTY0Mjg3NThkNjBiNjMzNzhjOGQyNjEwOTQyZjY= \
         -e DELEGATE_TAGS="" \
-        -e MANAGER_HOST_AND_PORT=https://app.harness.io us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:25.05.85903
-    EOF
+        -e MANAGER_HOST_AND_PORT=https://app.harness.io \
+        --restart always \
+        --name harness-delegate \
+        -d us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:25.05.85903
+  EOF
   }
 }
 
