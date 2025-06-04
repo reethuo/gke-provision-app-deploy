@@ -1,0 +1,4 @@
+image:
+  registry: "reethu.jfrog.io"
+  repository: "your-hello-world-repo/hello-world"
+  tag: "latest"
