@@ -19,6 +19,7 @@ resource "google_container_cluster" "cluster_1" {
     image_type   = "COS_CONTAINERD"
     disk_size_gb = 20
   }
+deletion_protection=false
 }
 
 # Needed to retrieve the cluster credentials
