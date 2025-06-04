@@ -1,4 +1,10 @@
 image:
-  registry: "reethu.jfrog.io"
-  repository: "your-hello-world-repo/hello-world"
-  tag: "latest"
+  registry: trialq2a49v.jfrog.io
+  repository: your-hello-world-repo/hello-world
+  tag: latest
+  pullPolicy: IfNotPresent
+
+global:
+  security:
+    allowInsecureImages: true
+
