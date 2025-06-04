@@ -57,7 +57,7 @@ resource "helm_release" "prometheus_operator" {
 }
 resource "helm_release" "hello_world" {
   name             = "hello-world"
-  chart            = "https://charts.bitnami.com/bitnami/nginx" # Replace with your chart if it's custom
+  chart            = "oci://registry-1.docker.io/bitnamicharts/nginx" # Replace with your chart if it's custom
   namespace        = "hello"
   create_namespace = true
 
