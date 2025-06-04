@@ -82,6 +82,7 @@ module "delegate" {
   delegate_image = "us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:25.05.85903"
   replicas = 1
   upgrader_enabled = true
+  depends_on = [google_container_cluster.cluster_1]
 }
 
 provider "helm" {
