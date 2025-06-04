@@ -5,7 +5,7 @@ provider "google" {
 }
 
 resource "google_container_cluster" "cluster_1" {
-  name     = "cluster-2"
+  name     = "cluster-1"
   location = "us-west1-c"
 
   release_channel {
