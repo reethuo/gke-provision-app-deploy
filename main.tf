@@ -126,14 +126,6 @@ resource "helm_release" "prometheus_operator" {
   depends_on = [google_container_cluster.cluster_1]
 }
 
-resource "null_resource" "apply_prometheus_operator" {
-  provisioner "local-exec" {
-    command = "kubectl apply -f ${path.module}/prometheus-values.yaml"
-  }
-
-  depends_on = [google_container_cluster.cluster_1]
-}
-
 
 provider "helm" {
   kubernetes {
