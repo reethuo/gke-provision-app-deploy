@@ -157,6 +157,16 @@ resource "helm_release" "hello_world" {
 }
 
 
+locals {
+  auth_string  = base64encode("${var.docker_username}:${var.docker_password}")
+  registry_url = "https://trialq2a49v.jfrog.io"
+
+  dockerconfigjson = base64encode(templatefile("${path.module}/dockerconfig.tpl.json", {
+    registry_url = local.registry_url,
+    auth_string  = local.auth_string
+  }))
+}
+
 resource "kubernetes_secret" "regcred" {
   metadata {
     name      = "regcred"
@@ -166,16 +176,11 @@ resource "kubernetes_secret" "regcred" {
   type = "kubernetes.io/dockerconfigjson"
 
   data = {
-    ".dockerconfigjson" = base64encode(jsonencode({
-      auths = {
-        "https://trialq2a49v.jfrog.io" = {
-          auth = base64encode("${var.docker_username}:${var.docker_password}")
-        }
-      }
-    }))
+    ".dockerconfigjson" = local.dockerconfigjson
   }
 
   depends_on = [kubernetes_namespace.nginx]
 }
+
 
 
