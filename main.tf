@@ -114,12 +114,16 @@ resource "kubernetes_service" "nginx" {
   }
 }
 
-resource "kubernetes_namespace" "monitoring" {
-  metadata {
-    name = "monitoring"
-  }
-}
 
+resource "helm_release" "prometheus_operator" {
+  name       = "kube-prometheus-stack"
+  chart      = "kube-prometheus-stack"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  namespace  = "monitoring"
+  create_namespace = true
+  values     = [file("${path.module}/prometheus-values.yaml")]
+  depends_on = [google_container_cluster.cluster_1]
+}
 
 resource "null_resource" "apply_prometheus_operator" {
   provisioner "local-exec" {
