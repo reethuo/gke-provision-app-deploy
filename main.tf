@@ -169,10 +169,7 @@ resource "kubernetes_secret" "regcred" {
     ".dockerconfigjson" = base64encode(jsonencode({
       auths = {
         "https://trialq2a49v.jfrog.io" = {
-          username = var.docker_username,
-          password = var.docker_password,
-          email    = var.docker_email,
-          auth     = base64encode("${var.docker_username}:${var.docker_password}")
+          auth = base64encode("${var.docker_username}:${var.docker_password}")
         }
       }
     }))
@@ -180,4 +177,5 @@ resource "kubernetes_secret" "regcred" {
 
   depends_on = [kubernetes_namespace.nginx]
 }
+
 
