@@ -120,4 +120,11 @@ resource "kubernetes_namespace" "monitoring" {
 }
 
 
+resource "null_resource" "apply_prometheus_operator" {
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${path.module}/prometheus-operator.yaml"
+  }
+
+  depends_on = [google_container_cluster.cluster_1]
+}
 
