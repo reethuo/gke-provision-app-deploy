@@ -167,6 +167,7 @@ locals {
   }))
 }
 
+
 resource "kubernetes_secret" "regcred" {
   metadata {
     name      = "regcred"
