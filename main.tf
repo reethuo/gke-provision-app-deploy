@@ -168,11 +168,11 @@ resource "kubernetes_secret" "regcred" {
   data = {
     ".dockerconfigjson" = base64encode(jsonencode({
       auths = {
-        "trialq2a49v.jfrog.io" = {
-          username = var.docker_username
-          password = var.docker_password
-          email    = var.docker_email
-          auth     = "${var.docker_username}:${var.docker_password}"
+        "https://trialq2a49v.jfrog.io" = {
+          username = var.docker_username,
+          password = var.docker_password,
+          email    = var.docker_email,
+          auth     = base64encode("${var.docker_username}:${var.docker_password}")
         }
       }
     }))
