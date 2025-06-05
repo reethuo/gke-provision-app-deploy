@@ -1,0 +1,7 @@
+{
+  "auths": {
+    "${registry_url}": {
+      "auth": "${auth_string}"
+    }
+  }
+}
