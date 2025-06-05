@@ -3,6 +3,8 @@ image:
   repository: your-hello-world-repo/hello-world
   tag: latest
   pullPolicy: IfNotPresent
+  pullSecrets:
+    - name: regcred
 
 service:
   type: LoadBalancer
@@ -12,6 +14,5 @@ global:
   security:
     allowInsecureImages: true
 
-imagePullSecrets:
-  - name: regcred
+
 
