@@ -1,0 +1,13 @@
+replicaCount: 1
+
+image:
+  repository: trialq2a49v.jfrog.io/your-hello-world-repo/hello-world
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecret: jfrog-secret
+
+ingress:
+  enabled: false
+
+service:
+  type: ClusterIP
