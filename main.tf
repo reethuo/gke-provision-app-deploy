@@ -128,3 +128,23 @@ resource "null_resource" "apply_prometheus_operator" {
   depends_on = [google_container_cluster.cluster_1]
 }
 
+
+provider "helm" {
+  kubernetes {
+    host                   = google_container_cluster.cluster_1.endpoint
+    cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
+    token                  = data.google_client_config.default.access_token
+  }
+}
+
+
+resource "helm_release" "hello_world" {
+  name             = "hello-world"
+  chart            = "oci://registry-1.docker.io/bitnamicharts/nginx"  # Using Bitnami nginx as a template
+  namespace        = "hello"
+  create_namespace = true
+
+  values = [file("${path.module}/hello-values.yaml")]
+
+  depends_on = [google_container_cluster.cluster_1]
+}
