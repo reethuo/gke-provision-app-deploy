@@ -139,7 +139,7 @@ provider "helm" {
 
 resource "helm_release" "hello_world" {
   name             = "hello-world"
-  chart            = "oci://registry-1.docker.io/bitnamicharts/nginx"  # Using Bitnami nginx as a template
+  chart            = "./hello-world"          # Path to your minimal Helm chart folder
   namespace        = "hello"
   create_namespace = true
 
@@ -147,3 +147,4 @@ resource "helm_release" "hello_world" {
 
   depends_on = [google_container_cluster.cluster_1]
 }
+
