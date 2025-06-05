@@ -12,3 +12,6 @@ global:
   security:
     allowInsecureImages: true
 
+imagePullSecrets:
+  - name: regcred
+
