@@ -10,4 +10,4 @@ ingress:
   enabled: false
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
