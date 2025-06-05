@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.2"
+    }
+  }
+}
 provider "google" {
   project = "static-epigram-458808-h4"
   region  = "us-west1"
