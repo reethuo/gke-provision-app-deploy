@@ -172,7 +172,7 @@ resource "kubernetes_secret" "regcred" {
           username = var.docker_username
           password = var.docker_password
           email    = var.docker_email
-          auth     = base64encode("${var.docker_username}:${var.docker_password}")
+          auth     = "${var.docker_username}:${var.docker_password}"
         }
       }
     }))
@@ -180,3 +180,4 @@ resource "kubernetes_secret" "regcred" {
 
   depends_on = [kubernetes_namespace.nginx]
 }
+
