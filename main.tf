@@ -22,52 +22,6 @@ resource "google_container_cluster" "cluster_1" {
 deletion_protection=false
 }
 
-# Needed to retrieve the cluster credentials
-data "google_client_config" "default" {}
-
-provider "kubernetes" {
-  host                   = google_container_cluster.cluster_1.endpoint
-  cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
-  token                  = data.google_client_config.default.access_token
-}
-
-
-
-resource "helm_release" "nginx_ingress" {
-  name       = "nginx-ingress"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  namespace  = "ingress-nginx"
-  create_namespace = true
-
-  depends_on = [google_container_cluster.cluster_1]
-}
-resource "helm_release" "prometheus_operator" {
-  name             = "prometheus-operator"
-  repository       = "https://prometheus-community.github.io/helm-charts"
-  chart            = "kube-prometheus-stack"
-  namespace        = "monitoring"
-  create_namespace = true
-  version          = "58.1.0" # Optional: stable version
-
-  values = [
-    file("${path.module}/prometheus-values.yaml")
-  ]
-
-  depends_on = [google_container_cluster.cluster_1]
-}
-resource "helm_release" "hello_world" {
-  name             = "hello-world"
-  chart            = "oci://registry-1.docker.io/bitnamicharts/nginx" # Replace with your chart if it's custom
-  namespace        = "hello"
-  create_namespace = true
-
-  values = [
-    file("${path.module}/hello-values.yaml")
-  ]
-
-  depends_on = [google_container_cluster.cluster_1]
-}
 
 module "delegate" {
   source = "harness/harness-delegate/kubernetes"
@@ -85,10 +39,85 @@ module "delegate" {
   depends_on = [google_container_cluster.cluster_1]
 }
 
-provider "helm" {
-  kubernetes {
-    host                   = google_container_cluster.cluster_1.endpoint
-    cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
-    token                  = data.google_client_config.default.access_token
+
+provider "kubernetes" {
+  host                   = google_container_cluster.cluster_1.endpoint
+  cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
+  token                  = data.google_client_config.default.access_token
+}
+
+
+resource "kubernetes_namespace" "nginx" {
+  metadata {
+    name = "nginx"
   }
 }
+
+resource "kubernetes_deployment" "nginx" {
+  metadata {
+    name      = "nginx-deployment"
+    namespace = kubernetes_namespace.nginx.metadata[0].name
+    labels = {
+      app = "nginx"
+    }
+  }
+
+  spec {
+    replicas = 2
+
+    selector {
+      match_labels = {
+        app = "nginx"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "nginx"
+        }
+      }
+
+      spec {
+        container {
+          name  = "nginx"
+          image = "nginx:latest"
+          ports {
+            container_port = 80
+          }
+        }
+      }
+    }
+  }
+
+  depends_on = [google_container_cluster.cluster_1]
+}
+
+resource "kubernetes_service" "nginx" {
+  metadata {
+    name      = "nginx-service"
+    namespace = kubernetes_namespace.nginx.metadata[0].name
+  }
+
+  spec {
+    selector = {
+      app = kubernetes_deployment.nginx.metadata[0].labels.app
+    }
+
+    port {
+      port        = 80
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
+  }
+}
+
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = "monitoring"
+  }
+}
+
+
+
