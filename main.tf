@@ -42,10 +42,11 @@ module "delegate" {
 
 
 provider "kubernetes" {
-  host                   = google_container_cluster.cluster_1.endpoint
+  host                   = "https://${google_container_cluster.cluster_1.endpoint}"
   cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
   token                  = data.google_client_config.default.access_token
 }
+
 
 
 resource "kubernetes_namespace" "nginx" {
@@ -136,11 +137,12 @@ resource "null_resource" "apply_prometheus_operator" {
 
 provider "helm" {
   kubernetes {
-    host                   = google_container_cluster.cluster_1.endpoint
+    host                   = "https://${google_container_cluster.cluster_1.endpoint}"
     cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
     token                  = data.google_client_config.default.access_token
   }
 }
+
 
 
 resource "helm_release" "hello_world" {
