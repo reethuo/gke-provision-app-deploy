@@ -161,10 +161,10 @@ locals {
   auth_string  = base64encode("${var.docker_username}:${var.docker_password}")
   registry_url = "https://trialq2a49v.jfrog.io"
 
-  dockerconfigjson = base64encode(templatefile("${path.module}/dockerconfig.tpl.json", {
+  dockerconfigjson = templatefile("${path.module}/dockerconfig.tpl.json", {
     registry_url = local.registry_url,
     auth_string  = local.auth_string
-  }))
+  })
 }
 
 
