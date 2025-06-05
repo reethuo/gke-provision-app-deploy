@@ -9,13 +9,13 @@ spec:
     matchLabels:
       team: frontend
   remoteWrite:
-    - url: "https://your-remote-prometheus.com/api/v1/write"
+    - url: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom"
       basicAuth:
         username:
-          name: prometheus-remote-secret
+          name: prometheus-remote-write-auth
           key: username
         password:
-          name: prometheus-remote-secret
+          name: prometheus-remote-write-auth
           key: password
   resources:
     requests:
