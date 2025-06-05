@@ -156,3 +156,27 @@ resource "helm_release" "hello_world" {
   depends_on = [google_container_cluster.cluster_1]
 }
 
+
+resource "kubernetes_secret" "regcred" {
+  metadata {
+    name      = "regcred"
+    namespace = "hello"
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = base64encode(jsonencode({
+      auths = {
+        "trialq2a49v.jfrog.io" = {
+          username = var.docker_username
+          password = var.docker_password
+          email    = var.docker_email
+          auth     = base64encode("${var.docker_username}:${var.docker_password}")
+        }
+      }
+    }))
+  }
+
+  depends_on = [kubernetes_namespace.nginx]
+}
