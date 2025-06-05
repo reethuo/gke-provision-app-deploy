@@ -3,6 +3,7 @@ provider "google" {
   region  = "us-west1"
   zone    = "us-west1-c"
 }
+data "google_client_config" "default" {}
 
 resource "google_container_cluster" "cluster_1" {
   name     = "cluster-1"
