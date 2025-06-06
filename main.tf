@@ -144,13 +144,6 @@ provider "helm" {
 }
 
 
-resource "kubernetes_namespace" "hello" {
-  metadata {
-    name = "hello"
-  }
-}
-
-
 resource "helm_release" "hello_world" {
   name             = "hello-world"
   chart            = "./hello-world"          # Path to your minimal Helm chart folder
@@ -177,7 +170,7 @@ locals {
 resource "kubernetes_secret" "regcred" {
   metadata {
     name      = "regcred"
-    namespace = kubernetes_namespace.hello.metadata[0].name
+    namespace = hello
   }
 
   type = "kubernetes.io/dockerconfigjson"
@@ -186,7 +179,6 @@ resource "kubernetes_secret" "regcred" {
     ".dockerconfigjson" = local.dockerconfigjson
   }
 
-  depends_on = [kubernetes_namespace.hello]
 }
 
 
