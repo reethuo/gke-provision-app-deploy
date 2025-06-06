@@ -182,5 +182,18 @@ resource "kubernetes_secret" "regcred" {
 }
 
 
+resource "kubernetes_secret" "prometheus_remote_write_auth" {
+  metadata {
+    name      = "prometheus-remote-write-auth"
+    namespace = "monitoring"
+  }
+
+  type = "Opaque"
+
+  string_data = {
+    username = "2478155"
+    password = "glc_eyJvIjoiMTQ0NzM3NiIsIm4iOiJzdGFjay0xMjc2OTYwLWhtLXJlYWQtbWV0cmljcy1wcm9tIiwiayI6InIwNmZwcFlxaTA3MXc4Y3E4N3FFWjBXMCIsIm0iOnsiciI6InByb2QtYXAtc291dGgtMSJ9fQ=="
+  }
+}
 
 
