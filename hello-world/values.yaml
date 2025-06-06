@@ -15,4 +15,13 @@ service:
   targetPort: 8082
 
 prometheus:
-  enabled: false
+  prometheusSpec:
+    remoteWrite:
+      - url: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom"
+        basicAuth:
+          username:
+            name: prometheus-remote-write-auth
+            key: username
+          password:
+            name: prometheus-remote-write-auth
+            key: password
