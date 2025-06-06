@@ -1,0 +1,14 @@
+global:
+  resolve_timeout: 5m
+
+receivers:
+  - name: grafana-cloud
+    webhook_configs:
+    - url: https://alertmanager-prod-ap-south-1.grafana.net
+      http_config:
+        basic_auth:
+          username: 1237023
+          password: glc_eyJvIjoiMTQ0NzM3NiIsIm4iOiJzdGFjay0xMjc2OTYwLWFtLWdyYWZhbmEtYWxlcnQtbWV0cmljcyIsImsiOiJpSGJHOTl6SFQ0N0xWQWxQMUtmMDc2ODkiLCJtIjp7InIiOiJwcm9kLWFwLXNvdXRoLTEifX0=
+
+route:
+  receiver: grafana-cloud
