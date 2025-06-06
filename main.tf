@@ -191,8 +191,8 @@ resource "kubernetes_secret" "prometheus_remote_write_auth" {
   type = "Opaque"
 
   data = {
-    username = base64encode("2478155")
-    password = "glc_eyJvIjoiMTQ0NzM3NiIsIm4iOiJzdGFjay0xMjc2OTYwLWhtLXJlYWQtbWV0cmljcy1wcm9tIiwiayI6InIwNmZwcFlxaTA3MXc4Y3E4N3FFWjBXMCIsIm0iOnsiciI6InByb2QtYXAtc291dGgtMSJ9fQ=="
+    username = "2478155"
+    password = "glc_eyJvIjoiMTQ0NzM3NiIsIm4iOiJzdGFjay0xMjc2OTYwLWhtLXJlYWQtbWV0cmljcy1wcm9tIiwiayI6InIwNmZwcFlxaTA3MXc4Y3E4N3FFWjBXMCIsIm0iOnsiciI6InByb2QtYXAtc291dGgtMSJ9fQ"
   }
 
   depends_on = [helm_release.prometheus_operator]
