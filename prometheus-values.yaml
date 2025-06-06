@@ -1,23 +1,18 @@
-apiVersion: monitoring.coreos.com/v1
-kind: Prometheus
-metadata:
-  name: k8s
-  namespace: monitoring
-spec:
-  serviceAccountName: prometheus-k8s
-  serviceMonitorSelector:
-    matchLabels:
-      team: frontend
-  remoteWrite:
-    - url: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom"
-      basicAuth:
-        username:
-          name: prometheus-remote-write-auth
-          key: username
-        password:
-          name: prometheus-remote-write-auth
-          key: password
-  resources:
-    requests:
-      memory: 400Mi
-
+prometheus:
+  prometheusSpec:
+    serviceAccountName: prometheus-k8s
+    serviceMonitorSelector:
+      matchLabels:
+        team: frontend
+    remoteWrite:
+      - url: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom"
+        basicAuth:
+          username:
+            name: prometheus-remote-write-auth
+            key: username
+          password:
+            name: prometheus-remote-write-auth
+            key: password
+    resources:
+      requests:
+        memory: 400Mi
