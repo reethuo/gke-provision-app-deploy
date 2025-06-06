@@ -137,6 +137,11 @@ resource "helm_release" "prometheus_operator" {
     name  = "defaultRules.create"
     value = "true"
   }
+
+  set {
+    name  = "alertmanager.config"
+    value = file("${path.module}/alertmanager-config.yaml")
+  }
 }
 
 
