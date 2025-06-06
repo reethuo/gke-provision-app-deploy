@@ -132,6 +132,11 @@ resource "helm_release" "prometheus_operator" {
   create_namespace = true
   values     = [file("${path.module}/prometheus-values.yaml")]
   depends_on = [google_container_cluster.cluster_1]
+
+  set {
+    name  = "defaultRules.create"
+    value = "true"
+  }
 }
 
 
