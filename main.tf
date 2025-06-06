@@ -170,7 +170,7 @@ locals {
 resource "kubernetes_secret" "regcred" {
   metadata {
     name      = "regcred"
-    namespace = hello
+    namespace = "hello"
   }
 
   type = "kubernetes.io/dockerconfigjson"
