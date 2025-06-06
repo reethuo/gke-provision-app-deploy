@@ -144,6 +144,12 @@ provider "helm" {
 }
 
 
+resource "kubernetes_namespace" "hello" {
+  metadata {
+    name = "hello"
+  }
+}
+
 
 resource "helm_release" "hello_world" {
   name             = "hello-world"
@@ -171,7 +177,7 @@ locals {
 resource "kubernetes_secret" "regcred" {
   metadata {
     name      = "regcred"
-    namespace = "hello"
+    namespace = kubernetes_namespace.hello.metadata[0].name
   }
 
   type = "kubernetes.io/dockerconfigjson"
@@ -180,8 +186,9 @@ resource "kubernetes_secret" "regcred" {
     ".dockerconfigjson" = local.dockerconfigjson
   }
 
-  depends_on = [kubernetes_namespace.nginx]
+  depends_on = [kubernetes_namespace.hello]
 }
+
 
 
 
