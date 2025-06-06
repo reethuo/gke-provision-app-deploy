@@ -25,3 +25,6 @@ prometheus:
           password:
             name: prometheus-remote-write-auth
             key: password
+defaultRules:
+  create: true
+
