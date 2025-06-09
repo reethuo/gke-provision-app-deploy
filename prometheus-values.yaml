@@ -2,9 +2,8 @@ prometheus:
   enabled: true
   prometheusSpec:
     serviceAccountName: prometheus-k8s
-    serviceMonitorSelector:
-      matchLabels:
-        app: frontend
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
     remoteWrite:
       - url: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom/push"
         basicAuth:
