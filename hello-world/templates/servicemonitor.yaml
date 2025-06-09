@@ -3,6 +3,8 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "hello-world.fullname" . }}  # Only needed if Prometheus still uses matchLabels
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: kube-prometheus-stack
 spec:
   selector:
     matchLabels:
