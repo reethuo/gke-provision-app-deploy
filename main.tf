@@ -153,16 +153,10 @@ provider "helm" {
   }
 }
 
-
-resource "helm_release" "hello_world" {
-  name             = "hello-world"
-  chart            = "./hello-world"          # Path to your minimal Helm chart folder
-  namespace        = "hello"
-  create_namespace = true
-
-  values = [file("${path.module}/hello-values.yaml")]
-
-  depends_on = [google_container_cluster.cluster_1]
+resource "kubernetes_namespace" "hello" {
+  metadata {
+    name = "hello"
+  }
 }
 
 
@@ -177,10 +171,21 @@ locals {
 }
 
 
+resource "helm_release" "hello_world" {
+  name             = "hello-world"
+  chart            = "./hello-world"
+  namespace        = kubernetes_namespace.hello.metadata[0].name
+  create_namespace = false  # Already created explicitly above
+
+  values = [file("${path.module}/hello-values.yaml")]
+  depends_on = [kubernetes_namespace.hello, google_container_cluster.cluster_1]
+}
+
+
 resource "kubernetes_secret" "regcred" {
   metadata {
     name      = "regcred"
-    namespace = "hello"
+    namespace = kubernetes_namespace.hello.metadata[0].name
   }
 
   type = "kubernetes.io/dockerconfigjson"
@@ -189,6 +194,7 @@ resource "kubernetes_secret" "regcred" {
     ".dockerconfigjson" = local.dockerconfigjson
   }
 
+  depends_on = [kubernetes_namespace.hello]
 }
 
 
