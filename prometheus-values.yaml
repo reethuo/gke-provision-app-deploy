@@ -20,5 +20,7 @@ prometheus:
 kubeStateMetrics:
   enabled: true
   serviceMonitor:
+    enabled: true
     namespaceSelector:
       any: true
+
