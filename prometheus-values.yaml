@@ -17,3 +17,5 @@ prometheus:
     resources:
       requests:
         memory: 400Mi
+kubeStateMetrics:
+  enabled: true
