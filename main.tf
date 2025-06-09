@@ -189,7 +189,6 @@ resource "kubernetes_secret" "regcred" {
     ".dockerconfigjson" = local.dockerconfigjson
   }
 
-  depends_on = [kubernetes_namespace.hello]
 }
 
 
