@@ -13,7 +13,10 @@ service:
   type: LoadBalancer
   port: 8082
   targetPort: 8082
+  # Add a name for this port (important for ServiceMonitor)
+  name: http
 
+# 👇 Enables Prometheus remoteWrite and ServiceMonitor
 prometheus:
   prometheusSpec:
     remoteWrite:
@@ -25,6 +28,16 @@ prometheus:
           password:
             name: prometheus-remote-write-auth
             key: password
+
+  monitor:
+    enabled: true
+    additionalLabels:
+      release: prometheus # Match this to your Prometheus Operator release name (default: "prometheus")
+    interval: 15s
+    scrapeTimeout: 10s
+    path: /metrics
+    port: http  # Matches `service.name` above
+
 defaultRules:
   create: true
 
