@@ -31,6 +31,8 @@ prometheus:
 
   monitor:
     enabled: true # Match this to your Prometheus Operator release name (default: "prometheus")
+    serviceMonitorNamespaceSelector: {}
+    serviceMonitorSelector: {}
     interval: 15s
     scrapeTimeout: 10s
     path: /metrics
