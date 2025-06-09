@@ -32,7 +32,7 @@ prometheus:
   monitor:
     enabled: true
     additionalLabels:
-      release: prometheus # Match this to your Prometheus Operator release name (default: "prometheus")
+      release: kube-prometheus-stack # Match this to your Prometheus Operator release name (default: "prometheus")
     interval: 15s
     scrapeTimeout: 10s
     path: /metrics
