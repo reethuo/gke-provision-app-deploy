@@ -17,6 +17,8 @@ prometheus:
     resources:
       requests:
         memory: 400Mi
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
 
 kubeStateMetrics:
   enabled: true
@@ -24,5 +26,7 @@ kubeStateMetrics:
     enabled: true
     namespaceSelector:
       any: true
-
+      
+alertmanager:
+  enabled: true
 
