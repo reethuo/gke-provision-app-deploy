@@ -153,12 +153,6 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_namespace" "hello" {
-  metadata {
-    name = "hello"
-  }
-}
-
 
 locals {
   auth_string  = base64encode("${var.docker_username}:${var.docker_password}")
@@ -174,18 +168,19 @@ locals {
 resource "helm_release" "hello_world" {
   name             = "hello-world"
   chart            = "./hello-world"
-  namespace        = kubernetes_namespace.hello.metadata[0].name
-  create_namespace = false  # Already created explicitly above
+  namespace        = "hello"
+  create_namespace = true
 
   values = [file("${path.module}/hello-values.yaml")]
-  depends_on = [kubernetes_namespace.hello, google_container_cluster.cluster_1]
+  depends_on = [google_container_cluster.cluster_1]
 }
+
 
 
 resource "kubernetes_secret" "regcred" {
   metadata {
     name      = "regcred"
-    namespace = kubernetes_namespace.hello.metadata[0].name
+    namespace = "hello"
   }
 
   type = "kubernetes.io/dockerconfigjson"
