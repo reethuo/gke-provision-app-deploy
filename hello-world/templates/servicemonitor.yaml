@@ -1,14 +1,15 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "hello-world.fullname" . }}  # Only needed if Prometheus still uses matchLabels
+  name: {{ include "hello-world.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    release: kube-prometheus-stack
+    app: {{ .Release.Name }}
+    release: kube-prometheus-stack  # 🔥 Needed — matches Prometheus `matchLabels`
 spec:
   selector:
     matchLabels:
-      app: {{ include "hello-world.name" . }}
+      app: {{ .Release.Name }}
   endpoints:
     - port: http
       interval: 15s
@@ -16,3 +17,4 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
+
