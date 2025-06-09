@@ -17,10 +17,12 @@ prometheus:
     resources:
       requests:
         memory: 400Mi
+
 kubeStateMetrics:
   enabled: true
   serviceMonitor:
     enabled: true
     namespaceSelector:
       any: true
+
 
