@@ -209,7 +209,7 @@ GO TO: ->https://reethu.grafana.net/explore
              "pod", "$1", "container", "(.*)"
              )
 
-             hit run query which is in blue color(below share)
+             hit run query which is in blue color(below share)[🔁]
            -> kube_pod_container_status_restarts_total
 
            -> rate(kube_pod_container_status_restarts_total[5m])
