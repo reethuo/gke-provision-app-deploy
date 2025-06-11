@@ -41,3 +41,6 @@ prometheus:
 defaultRules:
   create: true
 
+kubeStateMetrics:
+  metricLabelsAllowlist:
+    - pods=[*]
