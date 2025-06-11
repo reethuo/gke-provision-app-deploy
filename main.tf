@@ -164,6 +164,12 @@ locals {
   })
 }
 
+resource "kubernetes_namespace" "hello" {
+  metadata {
+    name = "hello"
+  }
+}
+
 
 resource "helm_release" "hello_world" {
   name             = "hello-world"
@@ -172,7 +178,11 @@ resource "helm_release" "hello_world" {
   create_namespace = true
 
   values = [file("${path.module}/hello-values.yaml")]
-  depends_on = [google_container_cluster.cluster_1]
+  depends_on = [
+    helm_release.prometheus_operator,     # ← Wait until Prometheus is installed
+    kubernetes_namespace.hello  # ← Wait for namespace to exist
+    google_container_cluster.cluster_1
+  ]
 }
 
 
@@ -180,7 +190,7 @@ resource "helm_release" "hello_world" {
 resource "kubernetes_secret" "regcred" {
   metadata {
     name      = "regcred"
-    namespace = "hello"
+    namespace = kubernetes_namespace.hello.metadata[0].name
   }
 
   type = "kubernetes.io/dockerconfigjson"
@@ -189,6 +199,7 @@ resource "kubernetes_secret" "regcred" {
     ".dockerconfigjson" = local.dockerconfigjson
   }
 
+  depends_on = [kubernetes_namespace.hello]
 }
 
 
