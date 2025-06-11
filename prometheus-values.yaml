@@ -1,11 +1,11 @@
 prometheus:
-  enabled: true
+  enabled: true #Deploys Prometheus via the Helm chart.
   prometheusSpec:
-    serviceAccountName: prometheus-k8s
-    serviceMonitorSelector: {}
-    serviceMonitorNamespaceSelector: {}
-    remoteWrite:
-      - url: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom/push"
+    serviceAccountName: prometheus-k8s #Uses a specific Kubernetes service account (important for RBAC and scraping cluster resources).
+    serviceMonitorSelector: {} #Matches all ServiceMonitor objects in the cluster — this allows Prometheus to discover services to scrape.
+    serviceMonitorNamespaceSelector: {} #Allows scraping from ServiceMonitors in all namespaces.
+    remoteWrite: #Sends metrics to an external Prometheus-compatible endpoint (Grafana Cloud, in your case).
+      - url: "https://prometheus-prod-43-prod-ap-south-1.grafana.net/api/prom/push" #Uses a Kubernetes secret for basic authentication.
         basicAuth:
           username:
             name: prometheus-remote-write-auth
@@ -13,19 +13,19 @@ prometheus:
           password:
             name: prometheus-remote-write-auth
             key: password
-    resources:
+    resources: #Ensures Prometheus pod requests at least 400Mi of memory (helps with scheduling and stability).
       requests:
-        memory: 400Mi
+        memory: 400Mi 
     serviceMonitorSelector: {}
     serviceMonitorNamespaceSelector: {}
 
-kubeStateMetrics:
-  enabled: true
-  serviceMonitor:
-    enabled: true
-    namespaceSelector:
+kubeStateMetrics: #Deploys kube-state-metrics, which exposes Kubernetes object state as Prometheus metrics.
+  enabled: true #Ensures the component is deployed.
+  serviceMonitor: 
+    enabled: true #Enables monitoring of kube-state-metrics itself.
+    namespaceSelector: #Allows Prometheus to discover the kube-state-metrics ServiceMonitor from any namespace.
       any: true
       
-alertmanager:
-  enabled: true
+alertmanager: #Enables Alertmanager, which handles firing alerts from Prometheus.
+  enabled: true #Deploys Alertmanager alongside Prometheus (required if you want alerting to work).
 
