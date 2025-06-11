@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-    #release: kube-prometheus-stack
+    release: kube-prometheus-stack
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-        #release: kube-prometheus-stack
+        release: kube-prometheus-stack
     spec:
       containers:
         - name: {{ .Release.Name }}
