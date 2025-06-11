@@ -180,7 +180,7 @@ resource "helm_release" "hello_world" {
   values = [file("${path.module}/hello-values.yaml")]
   depends_on = [
     helm_release.prometheus_operator,     # ← Wait until Prometheus is installed
-    kubernetes_namespace.hello  # ← Wait for namespace to exist
+    kubernetes_namespace.hello,  # ← Wait for namespace to exist
     google_container_cluster.cluster_1
   ]
 }
