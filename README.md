@@ -191,3 +191,35 @@ allowInsecureImages: true means:
 The system permits pulling or running container images that are not from a verified or trusted source.
 
 It may skip checks for things like image signatures, secure registries (HTTPS), or other verification mechanisms.
+
+In order to check metrics:
+
+GO TO: ->https://reethu.grafana.net/explore
+
+        ->Open code mode
+
+        ->In PromQL,
+
+          enter the below queries one by one
+
+          -> label_replace(
+              sum by(container, namespace) (
+               rate(kube_pod_container_status_restarts_total{namespace="hello"}[5m])
+              ),
+             "pod", "$1", "container", "(.*)"
+             )
+
+             hit run query which is in blue color(below share)
+           -> kube_pod_container_status_restarts_total
+
+           -> rate(kube_pod_container_status_restarts_total[5m])
+
+           -> count by(namespace) (rate(kube_pod_container_status_restarts_total[5m]))
+
+           -> rate(kube_pod_container_status_restarts_total[5m])
+
+           -> rate(kube_pod_container_status_restarts_total{namespace="hello"}[5m])
+
+           -> sum by(pod, namespace) (
+               rate(kube_pod_container_status_restarts_total{namespace="hello"}[5m])
+              ) 
