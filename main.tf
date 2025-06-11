@@ -53,7 +53,7 @@ module "delegate" {
 }
 
 
-provider "kubernetes" {
+provider "kubernetes" { #This Terraform block defines the Kubernetes provider configuration and enables Terraform to interact with your Google Kubernetes Engine (GKE) cluster. 
   host                   = "https://${google_container_cluster.cluster_1.endpoint}"
   cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
   token                  = data.google_client_config.default.access_token
@@ -128,7 +128,7 @@ resource "kubernetes_service" "nginx" {
 }
 
 
-resource "helm_release" "prometheus_operator" {
+resource "helm_release" "prometheus_operator" { #To deploy Prometheus, Alertmanager, Grafana, and supporting components into the Kubernetes cluster via Helm, with custom configuration, managed by Terraform.
   name       = "kube-prometheus-stack"
   chart      = "kube-prometheus-stack"
   repository = "https://prometheus-community.github.io/helm-charts"
@@ -149,7 +149,7 @@ resource "helm_release" "prometheus_operator" {
 }
 
 
-provider "helm" {
+provider "helm" { #It allows Terraform to run Helm commands (like installing charts) against your Kubernetes cluster, by setting up authentication and cluster access.
   kubernetes {
     host                   = "https://${google_container_cluster.cluster_1.endpoint}"
     cluster_ca_certificate = base64decode(google_container_cluster.cluster_1.master_auth[0].cluster_ca_certificate)
