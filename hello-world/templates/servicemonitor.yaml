@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Release.Name }}
-    release: kube-prometheus-stack  # 🔥 Needed — matches Prometheus `matchLabels`
+    #release: kube-prometheus-stack  🔥 Needed — matches Prometheus `matchLabels`
 spec:
   selector:
     matchLabels:
